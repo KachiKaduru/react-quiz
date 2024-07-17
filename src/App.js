@@ -5,6 +5,7 @@ import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
+import NextQuestion from "./components/NextQuestion";
 
 const initialState = {
   // the different status of the app would be
@@ -34,6 +35,8 @@ function reducer(state, action) {
         points:
           action.payload === question.correctOption ? state.points + question.points : state.points,
       };
+    case "nextQuestion":
+      return { ...state, index: state.index + 1, answer: null };
     default:
       throw new Error("unknown action");
   }
@@ -61,7 +64,10 @@ export default function App() {
         {status === "error" && <Error />}
         {status === "ready" && <StartScreen numQuestions={numQuestions} dispatch={dispatch} />}
         {status === "active" && (
-          <Question currentQuestion={questions[index]} dispatch={dispatch} answer={answer} />
+          <>
+            <Question currentQuestion={questions[index]} dispatch={dispatch} answer={answer} />
+            <NextQuestion dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>

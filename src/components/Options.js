@@ -1,6 +1,5 @@
 export default function Options({ currentQuestion, dispatch, answer }) {
   const hasAnswered = answer !== null;
-  console.log(hasAnswered);
 
   return (
     <div className="options">
