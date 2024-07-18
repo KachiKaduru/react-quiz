@@ -7,6 +7,7 @@ import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
 import NextQuestion from "./components/NextQuestion";
 import Progress from "./components/Progress";
+import FinishedScreen from "./components/FinishedScreen";
 
 const initialState = {
   // the different status of the app would be
@@ -14,7 +15,7 @@ const initialState = {
   status: "loading",
 
   questions: [],
-  index: 0,
+  index: 14,
   answer: null,
   points: 0,
 };
@@ -38,6 +39,8 @@ function reducer(state, action) {
       };
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
+    case "finish":
+      return { ...state, status: "finished" };
     default:
       throw new Error("unknown action");
   }
@@ -75,8 +78,17 @@ export default function App() {
               answer={answer}
             />
             <Question currentQuestion={questions[index]} dispatch={dispatch} answer={answer} />
-            <NextQuestion dispatch={dispatch} answer={answer} />
+            <NextQuestion
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numQuestions}
+            />
           </>
+        )}
+
+        {status === "finished" && (
+          <FinishedScreen points={points} maxPossiblePoints={maxPossiblePoints} />
         )}
       </Main>
     </div>
