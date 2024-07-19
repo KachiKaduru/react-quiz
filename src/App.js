@@ -1,4 +1,7 @@
 import { useEffect, useReducer } from "react";
+
+import { questionsArray } from "./questionsArray";
+
 import Main from "./components/Main";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
@@ -11,13 +14,23 @@ import FinishedScreen from "./components/FinishedScreen";
 import Timer from "./components/Timer";
 import Footer from "./components/Footer";
 
+// console.log(questionsArray);
+
 const SECS_PER_QUESTION = 20;
 
 const initialState = {
   // the different status of the app would be
   // loading, error, ready, active, and finished
-  status: "loading",
-  questions: [],
+
+  /*this was how it used to be when i was loadding
+  the data from local port:8000*/
+  // status: "loading",
+  // questions: [],
+
+  /* this is how it is now i'm loading it from the imported questionsArray */
+  status: "ready",
+  questions: questionsArray,
+  //
   index: 0,
   answer: null,
   points: 0,
@@ -30,8 +43,8 @@ function reducer(state, action) {
     case "dataReceived":
       return { ...state, questions: action.payload, status: "ready" };
 
-    case "dataFailed":
-      return { ...state, status: "error" };
+    // case "dataFailed":
+    //   return { ...state, status: "error" };
 
     case "start":
       return {
@@ -87,12 +100,17 @@ export default function App() {
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, cur) => prev + cur.points, 0);
 
-  useEffect(function () {
-    fetch("http://localhost:8000/questions")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch((err) => dispatch({ type: "dataFailed" }));
-  }, []);
+  //THIS WAS THE UseEffect FUNCTION THAT CALLED THE FAKE API
+  //FROM LOCAL PORT:8000 BUT IT COULDN'T BE USED IN PRODUCTION
+  //SO I HAD TO STORE THE DATA IN ANOTHER ARRAY AND IMPORT IT
+  //TO THIS FILE. (check the initialState.questions)
+
+  // useEffect(function () {
+  //   fetch("http://localhost:8000/questions")
+  //     .then((res) => res.json())
+  //     .then((data) => dispatch({ type: "dataReceived", payload: data }))
+  //     .catch((err) => dispatch({ type: "dataFailed" }));
+  // }, []);
 
   return (
     <div className="app">
