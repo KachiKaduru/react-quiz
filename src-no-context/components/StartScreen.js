@@ -1,8 +1,4 @@
-import { useQuiz } from "../contexts/QuizContext";
-
-export default function StartScreen() {
-  const { numQuestions, dispatch } = useQuiz();
-
+export default function StartScreen({ numQuestions, dispatch }) {
   function callDispatch() {
     dispatch({ type: "start" });
   }
